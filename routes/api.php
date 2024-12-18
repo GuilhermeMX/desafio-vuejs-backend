@@ -21,7 +21,7 @@ Route::get('/csrf-token', function () {
 
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/user/{id}', [UserController::class, 'show'])->where('id', '[0-9]+');
-Route::post('/user', [UserController::class, 'store']);
+Route::post('/users', [UserController::class, 'store']);
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

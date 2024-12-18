@@ -17,8 +17,8 @@ class AuthController extends Controller
      *
      * Autenticação via sanctum
      */
-    public function login(Request $request) {
-
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email'     => 'required|string|max:255',
             'password'  => 'required|string'
@@ -43,10 +43,10 @@ class AuthController extends Controller
             'access_token'  => $token,
             'token_type'    => 'Bearer'
         ]);
-
     }
 
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:255',
@@ -70,19 +70,18 @@ class AuthController extends Controller
             'access_token'  => $token,
             'token_type'    => 'Bearer'
         ]);
-
     }
 
     /*
      * Remove todos os tokens do usuário autenticado
      */
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
 
         Auth::user()->tokens()->delete();
 
         return response()->json([
             'message' => 'Logout successfull'
         ]);
-
     }
 }

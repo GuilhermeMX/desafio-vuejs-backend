@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
 
-    public function index() {
-
+    public function index()
+    {
         return User::select(
             'id',
             'name',
@@ -23,8 +23,8 @@ class UserController extends Controller
         )->orderBy('updated_at DESC')->get();
     }
 
-    public function show($id) {
-
+    public function show($id)
+    {
         return User::select(
             'id',
             'name',
@@ -33,15 +33,16 @@ class UserController extends Controller
             'created_at',
             'updated_at'
         )->where('id', '=', $id)->firstOrFail();
-
     }
-    public function store(Request $request) {
-
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:255',
             'email'     => 'required|string|max:255|unique:users',
             'password'  => 'required|string',
+            'company'   => 'required|string|max:255',
             'phone'     => 'nullable|string',
+            'created_at' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -52,7 +53,9 @@ class UserController extends Controller
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => Hash::make($request->password),
+            'company'   => $request->company,
             'phone'     => $request->phone,
+            'created_at' => 'required|date',
         ]);
 
         $user->createToken('auth_token')->plainTextToken;
@@ -60,7 +63,5 @@ class UserController extends Controller
         return response()->json([
             'data' => $user
         ]);
-
-    }
-
+    } 
 }
