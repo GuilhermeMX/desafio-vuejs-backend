@@ -36,32 +36,21 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|string|max:255|unique:users',
-            'password'  => 'required|string',
-            'company'   => 'required|string|max:255',
-            'phone'     => 'nullable|string',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|string|max:20',
+            'company' => 'nullable|string|max:255',
             'created_at' => 'required|date',
+            'password' => 'required|string|min:8',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $user = User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'company'   => $request->company,
-            'phone'     => $request->phone,
-            'created_at' => 'required|date',
-        ]);
+        $user = User::create($validated);
 
         $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'data' => $user
-        ]);
-    } 
+        ], 201);
+    }
 }
