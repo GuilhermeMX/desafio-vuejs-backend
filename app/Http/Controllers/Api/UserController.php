@@ -34,13 +34,13 @@ class UserController extends Controller
             'updated_at'
         )->where('id', '=', $id)->firstOrFail();
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'phone' => 'required|string|max:20',
-            'company' => 'nullable|string|max:255',
             'created_at' => 'required|date',
             'password' => 'required|string|min:8',
         ]);
@@ -52,5 +52,25 @@ class UserController extends Controller
         return response()->json([
             'data' => $user
         ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|string|max:20',
+            'created_at' => 'required|date',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update($validated);
+
+        return response()->json([
+            'data' => $user,
+            'message' => 'Usuário atualizado com sucesso!',
+        ]);
     }
 }

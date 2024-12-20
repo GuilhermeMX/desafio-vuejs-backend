@@ -20,8 +20,9 @@ Route::get('/csrf-token', function () {
 });
 
 Route::get('/users', [UserController::class, 'index']);
-Route::get('/user/{id}', [UserController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/users/{id}', [UserController::class, 'show'])->where('id', '[0-9]+');
 Route::post('/users', [UserController::class, 'store']);
+Route::put('/users/{id}', [UserController::class, 'update']);
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
